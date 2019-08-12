@@ -1,0 +1,97 @@
+\documentclass[12pt,longbibliography]{article}
+% Packages
+%-----------------------------------------------------------------
+
+% Allow direct use of accents such as á é ñ.
+\usepackage[utf8]{inputenc}
+
+% This is a good idea to have some symbols included within the font
+% properly:
+% http://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+%\usepackage[T1]{fontenc}
+
+% Set type of paper and margins.
+\usepackage[a4paper, margin=1.50cm]{geometry}
+
+\usepackage{amsmath, amsthm, amsfonts, amssymb}
+\usepackage{mathrsfs}           % \mathscr font.
+
+% Generate a PDF with hyperlinks in references.
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,breaklinks]{hyperref}
+
+% Double-stroke font (\mathbbm).
+\usepackage{bbm}
+
+\usepackage{titling}
+
+% Bibliography
+%-----------------------------------------------------------------
+
+% This uses a bibliography style which hyperlinks the paper titles to
+% the paper URL specified in the bibtex file. It also uses natbib,
+% which cites papers by name such as Euler (1770) instead of [17].
+
+\usepackage{breakurl}
+\usepackage{natbib}
+\usepackage{url}
+%\bibliographystyle{plainnat-linked}
+\bibliographystyle{apsrev}
+
+\title{\vspace{-8ex}Matlab PDE solver for flow net and consolidation}
+\author{\vspace{-5ex}Saurabh Singh}
+\date{\vspace{-8ex}}
+\begin{document}
+\maketitle
+\section{Parabolic partial differential equation}
+Following parabolic partial differential equation can be seen as a general diffusion equation
+\begin{align*}
+d*u^{\prime } -\nabla \ldotp \left(c*\nabla u\right)+a*u=f
+\end{align*}
+
+Here $d,c,a, \text{and} f$ are pde constants. $u(x,y,t)$ can be pressure head (total) or concentration of a solution etc. 
+
+\subsection{Laplace equation (Flow net)}
+By setting  $d = 0, a = 0, c = 1, \text{and} f = 0$. We obtain the Laplace equation i.e.
+
+\begin{align*}
+\nabla \ldotp \left(c*\nabla u\right)=0\\
+\frac{\partial^2 u}{\partial x^2 }+\frac{\partial^2 u}{\partial y^2 }=0
+\end{align*}
+
+In the flow problem of incompressible fluid under certain assumptions as prescribed in geomechanics text books at steady state the continuity equation results in a Laplace equation. Laplace equation can be solved for flow net for different geomechanics problems such as flow around sheet pile, dams, and other hydraulic substructures.
+
+This equation only requires boundary conditions and no initial condition. The types of boundary condition used here can be referred below.
+
+\subsection{Diffusion equation (Consolidation)}
+By setting  $d = C_v, a = 0, c = 1, \text{and} f = 0$. We obtain the consolidation equation i.e.
+
+\begin{align*}
+\nabla \ldotp \left(c*\nabla u\right)=d*u^{\prime }\\
+\frac{\partial^2 u}{\partial x^2 }+\frac{\partial^2 u}{\partial y^2 }=C_v \frac{\partial u}{\partial t}
+\end{align*}
+
+Above equation for consolidation can simply be derived from continuity equation written in terms of excess pore water pressure. With given initial excess pore water pressure due to end drainage condition, a flow of pore fluid is set up from soil domain towards the drainage boundary. Considering any generic element in the soil domain, we can write a continuity equation which derives (governs) the transport of this fluid. 
+
+This equation require initial condition along with the boundary condition.
+
+\subsection{Boundary conditions}
+\subsubsection{Constant head condition}
+\textbf{Dirichlet} $h*u=r$  constant head condition over a edge or face of the boundary. $h$ and $r$ are constants.
+
+\subsubsection{No flow condition}
+\textbf{Neumann} $\vec{n}.\left(c*\nabla{u}\right)+q*u=g$ Here $\nabla{u}$ is proportional to velocity so can be thought as velocity. $\vec{n}$ is the outward unit normal to the boundary of face on which Neumann condition is prescribed. is the same constant as used for original parabolic pde.
+
+By setting q and g to 0, we obtain $\vec{n}.\nabla{u} = 0$ which implies by putting Neumann condition we are enforcing that there would not be any flow across the boundary on which Neumann condition is prescribed.
+
+\textbf{\textit{So basically we will use Dirichlet when we have to prescribe a constant head condition on a boundary and Neumann when we have to prescribe a no flow condition across the boundary. Neumann can handle much more than no flow condition i.e. we can provide a controlled flow condition.}}
+
+A more detailed information can be obtained at 
+$\href{https://in.mathworks.com/help/releases/R2018b/pdf_doc/pde/pde.pdf}{\text{Matlab pde documentation}}$. We can learn further on solving pdes in Matlab with given link for pde documentation.
+
+The use of pde toolbox limits the types of pde and its boundary condition. With the matlab script, we can achieve much more.
+
+\section{Further}
+Although, we have used two dimensional conditions for solving these problems but a more general problem can be solved numerically. The use of matlab toolbox for getting a solution should inspire us to solve these problems numerically by coding in any of the convenient language.
+
+%\bibliography{References}	
+\end{document}
